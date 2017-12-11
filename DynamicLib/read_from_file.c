@@ -9,7 +9,7 @@ Vector read_from_file(char *filename){
     // Check for file
     if(file_in == NULL)
         exit(2);
-        
+    
     // Create string to hold each line of the file.
     char dblstr[10];
     

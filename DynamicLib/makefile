@@ -1,23 +1,21 @@
 CC=gcc
 
-CFLAGS=-c
+CFLAGS=-c -Wall -fPIC -I.
 
 CLEANUP=rm -rf *.o
 
-all: makeRanLib
+all: makeLink
 
-makeRanLib: makeLib
-	ranlib libArr.a
+makeLink: makeLib
+	ln -sf libArr.so.0.0 libArr.so.0
+	ln -sf libArr.so.0 libArr.so
 	
 makeLib: create_vector.o empty_vector.o insert.o print_vec.o delete_vector.o copy.o \
 	copy_range.o clear_vector.o zeros.o fill.o read_from_file.o write_to_file.o \
 	get_from_con.o add_from_con.o swap.o sort.o reverse.o dbl_equals.o \
 	search.o sum.o avg.o var.o stdv.o add.o sub.o mul.o divv.o dot.o equals.o
 	
-	ar rc libArr.a create_vector.o empty_vector.o insert.o print_vec.o delete_vector.o copy.o \
-	copy_range.o clear_vector.o zeros.o fill.o read_from_file.o write_to_file.o \
-	get_from_con.o add_from_con.o swap.o sort.o reverse.o dbl_equals.o \
-	search.o sum.o avg.o var.o stdv.o add.o sub.o mul.o divv.o dot.o equals.o
+	gcc -shared -Wl,-soname,libArr.so.0 -o libArr.so.0.0 *.o
 
 
 # Object Files	
@@ -110,7 +108,10 @@ equals.o: equals.c
 	
 # Compile command
 compile:
-	gcc -o runnable.exe main.c -L. -lArr -lm
+	gcc -o dynoRun.exe main.c -L. -lArr -lm
+	
+run:
+	LD_LIBRARY_PATH="." ./dynoRun.exe
 	
 # remove object
 clean:
